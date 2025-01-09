@@ -12,7 +12,13 @@ import Stats from "./Stats";
 // ];
 
 function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    const localValue = JSON.parse(localStorage.getItem("TODOS"));
+    return localValue || [];
+  });
+  useEffect(() => {
+    localStorage.setItem("TODOS", JSON.stringify(items));
+  }, [items]);
 
   // const [checkbox, setCheckbox] = useState(false);
 
@@ -25,7 +31,6 @@ function App() {
   }
 
   function handleToggleElement(id) {
-    // setCheckbox(!checkbox);
     setItems((items) =>
       items.map((item) =>
         item.id === id ? { ...item, packed: !item.packed } : item
@@ -39,7 +44,6 @@ function App() {
       "Are you sure you want to delete all items?"
     );
 
-    // {here if you click 'ok' then confirmed will be true if you click 'cancel' false}
     confirmed && setItems([]);
   }
 
